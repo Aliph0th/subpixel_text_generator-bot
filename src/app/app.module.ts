@@ -3,6 +3,7 @@ import { AppUpdate } from './app.update';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { errorMiddleware } from '../middlewares';
+import { session } from 'telegraf';
 
 @Module({
    imports: [
@@ -13,7 +14,7 @@ import { errorMiddleware } from '../middlewares';
          useFactory(configService: ConfigService) {
             return {
                token: configService.getOrThrow('TOKEN'),
-               middlewares: [errorMiddleware],
+               middlewares: [errorMiddleware, session()],
                options: { handlerTimeout: 3.6e6 }
             };
          }
