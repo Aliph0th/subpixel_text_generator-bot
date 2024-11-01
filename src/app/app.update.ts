@@ -1,9 +1,9 @@
 import { Action, Command, Ctx, Start, Update } from 'nestjs-telegraf';
-import { ACTIONS, COMMANDS, MESSAGES, SCENES } from '../constants';
-import { IContext, ISceneContext } from '../interfaces';
-import { selectModeKeyboard } from '../keyboards';
+import { ACTIONS, COMMANDS, MESSAGES, SCENES } from '../common/constants';
+import { IContext, ISceneContext } from '../common/interfaces';
+import { selectModeKeyboard } from '../common/keyboards';
 import { UseGuards } from '@nestjs/common';
-import { AdminGuard } from '../guards';
+import { AdminGuard } from '../common/guards';
 
 @Update()
 export class AppUpdate {

@@ -1,6 +1,6 @@
 import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
-import { MESSAGES, SCENES } from '../constants';
-import { ISceneContext } from '../interfaces';
+import { MESSAGES, SCENES } from '../common/constants';
+import { ISceneContext } from '../common/interfaces';
 
 @Scene(SCENES.ADMIN)
 export class AdminScene {

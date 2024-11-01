@@ -1,6 +1,6 @@
 import { Ctx, Hears, Message, Scene, SceneEnter } from 'nestjs-telegraf';
-import { MESSAGES, SCENES } from '../constants';
-import { IMessage, ISceneContext } from '../interfaces';
+import { MESSAGES, SCENES } from '../common/constants';
+import { IMessage, ISceneContext } from '../common/interfaces';
 import { GeneratorService } from '../generator/generator.service';
 
 @Scene(SCENES.MODE.TEXT)

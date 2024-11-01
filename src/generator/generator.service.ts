@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CLIENTS } from '../constants';
-import { IGeneratorClient, IGeneratorRequest, Mode } from '../interfaces';
+import { CLIENTS } from '../common/constants';
+import { IGeneratorClient, IGeneratorRequest, Mode } from '../common/interfaces';
 @Injectable()
 export class GeneratorService {
    constructor(@Inject(CLIENTS.GENERATOR) private readonly generatorClient: IGeneratorClient) {}

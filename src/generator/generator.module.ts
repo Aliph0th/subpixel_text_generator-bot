@@ -1,6 +1,6 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { CLIENTS } from '../constants';
-import { GeneratorModuleAsyncOptions } from '../interfaces';
+import { CLIENTS } from '../common/constants';
+import { GeneratorModuleAsyncOptions } from '../common/interfaces';
 import { GeneratorClient } from './generator.client';
 import { GeneratorService } from './generator.service';
 

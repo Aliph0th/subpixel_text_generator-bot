@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppUpdate } from './app.update';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
-import { errorMiddleware } from '../middlewares';
+import { errorMiddleware } from '../common/middlewares';
 import { session } from 'telegraf';
 import { GeneratorModule } from '../generator/generator.module';
 import { TextModeScene } from '../scenes/text';

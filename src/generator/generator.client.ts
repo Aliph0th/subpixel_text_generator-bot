@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { GeneratorModuleOptions, IGeneratorClient, IGeneratorRequest, Mode } from '../interfaces';
+import { GeneratorModuleOptions, IGeneratorClient, IGeneratorRequest, Mode } from '../common/interfaces';
 
 export class GeneratorClient implements IGeneratorClient {
    private readonly client: AxiosInstance;
