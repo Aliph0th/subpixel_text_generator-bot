@@ -1,7 +1,9 @@
-import { Action, Ctx, Start, Update } from 'nestjs-telegraf';
-import { ACTIONS, MESSAGES, SCENES } from '../constants';
+import { Action, Command, Ctx, Start, Update } from 'nestjs-telegraf';
+import { ACTIONS, COMMANDS, MESSAGES, SCENES } from '../constants';
 import { IContext, ISceneContext } from '../interfaces';
 import { selectModeKeyboard } from '../keyboards';
+import { UseGuards } from '@nestjs/common';
+import { AdminGuard } from '../guards';
 
 @Update()
 export class AppUpdate {
@@ -17,5 +19,11 @@ export class AppUpdate {
    async onTextMode(@Ctx() ctx: ISceneContext) {
       await ctx.scene.enter(SCENES.MODE.TEXT);
       await ctx.answerCbQuery();
+   }
+
+   @UseGuards(AdminGuard)
+   @Command(COMMANDS.ADMIN)
+   async onAdminCommand(@Ctx() ctx: ISceneContext) {
+      await ctx.scene.enter(SCENES.ADMIN);
    }
 }

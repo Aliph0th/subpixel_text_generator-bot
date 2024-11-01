@@ -4,7 +4,12 @@ export const MESSAGES = {
    SEND_TEXT: 'Отправьте текст',
    DONE: 'Готово',
    ERROR: {
-      GENERATION: 'Error during generating image on your request'
+      GENERATION: 'Error during generating image on your request',
+      ATTEMPT_ADMIN: (id: number, username: string = '<none>') =>
+         `Someone (${id}|@${username}) tried to get in to the admin panel`
+   },
+   ADMIN: {
+      ENTER: 'You entered the admin panel'
    }
 };
 
@@ -19,9 +24,15 @@ export const ACTIONS = {
 export const SCENES = {
    MODE: {
       TEXT: `${ACTIONS.MODE.TEXT}-scene`
-   }
+   },
+   ADMIN: 'admin-scene'
 };
 
 export const CLIENTS = {
    GENERATOR: 'generator-client'
+};
+
+export const COMMANDS = {
+   MODE: 'mode',
+   ADMIN: 'admin'
 };

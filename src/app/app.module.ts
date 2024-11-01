@@ -6,6 +6,7 @@ import { errorMiddleware } from '../middlewares';
 import { session } from 'telegraf';
 import { GeneratorModule } from '../generator/generator.module';
 import { TextModeScene } from '../scenes/text';
+import { AdminScene } from '../scenes/admin';
 
 @Module({
    imports: [
@@ -32,6 +33,6 @@ import { TextModeScene } from '../scenes/text';
          }
       })
    ],
-   providers: [AppUpdate, TextModeScene]
+   providers: [AppUpdate, TextModeScene, AdminScene]
 })
 export class AppModule {}
