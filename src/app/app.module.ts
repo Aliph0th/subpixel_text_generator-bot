@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { errorMiddleware } from '../middlewares';
 import { session } from 'telegraf';
+import { GeneratorModule } from '../generator/generator.module';
+import { TextModeScene } from '../scenes/text';
 
 @Module({
    imports: [
@@ -18,8 +20,18 @@ import { session } from 'telegraf';
                options: { handlerTimeout: 3.6e6 }
             };
          }
+      }),
+      GeneratorModule.forRootAsync({
+         isGlobal: true,
+         imports: [ConfigModule],
+         inject: [ConfigService],
+         useFactory(configService: ConfigService) {
+            return {
+               baseURL: configService.getOrThrow('GENERATOR_BACKEND_URL')
+            };
+         }
       })
    ],
-   providers: [AppUpdate]
+   providers: [AppUpdate, TextModeScene]
 })
 export class AppModule {}
