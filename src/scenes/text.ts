@@ -1,29 +1,22 @@
-import { Ctx, Hears, Message, Scene, SceneEnter } from 'nestjs-telegraf';
+import { Ctx, Hears, Message, Wizard, WizardStep } from 'nestjs-telegraf';
 import { MESSAGES, SCENES } from '../common/constants';
-import { IMessage, ISceneContext } from '../common/interfaces';
+import { IMessage, ISceneContext, IWizardContext } from '../common/interfaces';
 import { GeneratorService } from '../generator/generator.service';
 
-@Scene(SCENES.MODE.TEXT)
-export class TextModeScene {
+@Wizard(SCENES.MODE.TEXT)
+export class TextModeWizard {
    constructor(private readonly generatorService: GeneratorService) {}
-   @SceneEnter()
-   async onSceneEnter(@Ctx() ctx: ISceneContext) {
+   @WizardStep(1)
+   async onSceneEnter(@Ctx() ctx: IWizardContext) {
       await ctx.reply(MESSAGES.SEND_TEXT);
+      ctx.session.options ??= {};
+      ctx.session.options.mode = 0;
+      ctx.wizard.next();
    }
 
    @Hears(/^[^/]/)
+   @WizardStep(2)
    async onTextInput(@Ctx() ctx: ISceneContext, @Message() message: IMessage) {
-      const generatedBuffer = await this.generatorService.request(0, { text: message.text });
-      if (!generatedBuffer) {
-         await ctx.reply(MESSAGES.ERROR.GENERATION);
-         return;
-      }
-      await ctx.sendDocument(
-         {
-            source: generatedBuffer,
-            filename: 'output.png'
-         },
-         { caption: MESSAGES.DONE }
-      );
+      ctx.session.options.text = message.text;
    }
 }

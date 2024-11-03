@@ -6,7 +6,7 @@ import { session } from 'telegraf';
 import { errorMiddleware } from '../common/middlewares';
 import { GeneratorModule } from '../generator/generator.module';
 import { AdminScene } from '../scenes/admin';
-import { TextModeScene } from '../scenes/text';
+import { TextModeWizard } from '../scenes/text';
 import { AppUpdate } from './app.update';
 
 @Module({
@@ -41,6 +41,6 @@ import { AppUpdate } from './app.update';
          }
       })
    ],
-   providers: [AppUpdate, TextModeScene, AdminScene]
+   providers: [AppUpdate, TextModeWizard, AdminScene]
 })
 export class AppModule {}

@@ -16,3 +16,8 @@ export type Mode = 0 | 1 | 2;
 export interface IGeneratorRequest {
    text: string;
 }
+
+export interface IScriptOptions {
+   mode?: Mode;
+   text?: string;
+}

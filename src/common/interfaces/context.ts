@@ -1,5 +1,6 @@
 import { Context } from 'telegraf';
-import { SceneContextScene, SceneContext } from 'telegraf/typings/scenes';
+import { SceneContext, SceneContextScene, WizardContext, WizardContextWizard } from 'telegraf/typings/scenes';
+import { IScriptOptions } from './generator';
 
 export interface IContext extends Context {
    session: ISessionData;
@@ -9,8 +10,15 @@ export interface ISceneContext extends IContext {
    scene: SceneContextScene<SceneContext<ISessionData>, ISessionData> & ISceneState;
 }
 
+export interface IWizardContext extends ISceneContext {
+   wizard: WizardContextWizard<WizardContext<ISessionData>>;
+}
+
 export interface ISceneState {
    state: any;
 }
 
-export interface ISessionData extends ISceneState {}
+export interface ISessionData extends ISceneState {
+   options: IScriptOptions;
+   cursor: number;
+}
