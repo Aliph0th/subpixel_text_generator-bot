@@ -31,7 +31,7 @@ export interface ISubmenuButton extends IBaseButton {
    submenu: IMenuOptions;
 }
 export interface ISwitchButton extends IBaseButton {
-   values: any[];
+   values: Array<number | string | boolean>;
 }
 export interface IActionButton extends IBaseButton {
    callback: (..._: any[]) => void;

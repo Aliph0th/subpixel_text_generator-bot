@@ -10,7 +10,8 @@ export const MESSAGES = {
       EMPTY_BUTTONS: 'Buttons array cannot be empty',
       ATTEMPT_ADMIN: (id: number, username = '<none>') =>
          `Someone (${id}|@${username}) tried to get in to the admin panel`,
-      UNKNOWN: 'Unknown error happened'
+      UNKNOWN: 'Unknown error happened',
+      ACTION_TOO_LONG: 'Action must not exceed 64 bytes'
    },
    ADMIN: {
       ENTER: 'You entered the admin panel'
@@ -34,7 +35,8 @@ export const ACTIONS = {
 
 export const REGEX = {
    BUTTON_ACTION: /\(btn\)-t:(?<type>\w+)-m:(?<menuID>\w+)-p:(?<resulting>\w+)/g,
-   HINT_BUTTON: /\(hint\)-m:(?<menuID>\w+)-h:(?<hintID>\w+)/g
+   HINT_BUTTON: /\(hint\)-m:(?<menuID>\w+)-h:(?<hintID>\w+)/g,
+   SWITCH_VALUES: /-v:{(?<values>[\w,]+)}/g
 };
 
 export const SCENES = {

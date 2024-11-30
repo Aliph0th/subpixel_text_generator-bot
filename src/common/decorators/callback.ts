@@ -6,8 +6,11 @@ import { IContext } from '../interfaces';
 export const CallbackData = createParamDecorator((regex: RegExp, context: ExecutionContext) => {
    const ctx = TelegrafExecutionContext.create(context).getContext<IContext>();
    const update = ctx.update as Update.CallbackQueryUpdate<CallbackQuery.DataQuery>;
-   const data = update.callback_query.data.matchAll(regex).next().value as RegExpExecArray;
-   return data.groups;
+   const action = update.callback_query.data;
+   return {
+      action,
+      data: (action.matchAll(regex).next().value as RegExpExecArray).groups
+   };
 });
 
 export const CallbackKeyboard = createParamDecorator((_, context: ExecutionContext) => {

@@ -34,7 +34,7 @@ export class MenuService {
 
    patch({ inline_keyboard }: InlineKeyboardMarkup, resulting: string, value: string): InlineKeyboardMarkup | null {
       const markup = inline_keyboard as InlineKeyboardButton.CallbackButton[][];
-      const regex = new RegExp(`p:${resulting}$`, 'g');
+      const regex = new RegExp(`-p:${resulting}`, 'g');
       let found = false;
       for (let i = 0; i < markup.length; ++i) {
          if (found) {
