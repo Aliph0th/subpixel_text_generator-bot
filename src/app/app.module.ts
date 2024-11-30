@@ -8,6 +8,7 @@ import { GeneratorModule } from '../generator/generator.module';
 import { AdminScene } from '../scenes/admin';
 import { TextModeWizard } from '../scenes/text';
 import { AppUpdate } from './app.update';
+import { MenuModule } from '../menu/menu.module';
 
 @Module({
    imports: [
@@ -39,7 +40,8 @@ import { AppUpdate } from './app.update';
                baseURL: configService.getOrThrow('GENERATOR_BACKEND_URL')
             };
          }
-      })
+      }),
+      MenuModule
    ],
    providers: [AppUpdate, TextModeWizard, AdminScene]
 })
