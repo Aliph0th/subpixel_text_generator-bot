@@ -23,4 +23,5 @@ export interface ISessionData extends ISceneState {
    options: IScriptOptions;
    cursor: number;
    menu: IMenuState;
+   __scenes: { cursor: number; current: string };
 }

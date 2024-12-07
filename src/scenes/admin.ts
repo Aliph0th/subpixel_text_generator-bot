@@ -7,6 +7,8 @@ export class AdminScene {
    constructor() {}
    @SceneEnter()
    async onSceneEnter(@Ctx() ctx: ISceneContext) {
-      await ctx.reply(MESSAGES.ADMIN.ENTER);
+      if (!ctx.scene.state?.silent) {
+         await ctx.reply(MESSAGES.ADMIN.ENTER);
+      }
    }
 }

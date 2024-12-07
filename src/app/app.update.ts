@@ -28,7 +28,7 @@ export class AppUpdate {
          parseMode: 'HTML',
          buttons: [
             this.MENU.bool({ title: 'first button', resultingProperty: 'resulting_prop', hint: 'this is hint' }),
-            this.MENU.bool({ title: 'second button', default: true, resultingProperty: '2nd' }),
+            this.MENU.numbers({ title: 'second button', option: 'double', max: 23, resultingProperty: '2nd' }),
             this.MENU.switch({ title: 'switch', resultingProperty: 'swtch', values: ['font1', 3] })
          ]
       });

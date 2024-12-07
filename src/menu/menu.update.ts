@@ -5,12 +5,13 @@ import { CallbackData, CallbackKeyboard } from '../common/decorators';
 import { ICallbackData, ISceneContext } from '../common/interfaces';
 import { destroyKeyboard } from '../common/keyboards';
 import { MenuService } from './menu.service';
+import { SCENES } from '../common/constants';
 
 @Update()
 export class MenuUpdate {
    constructor(private readonly menuService: MenuService) {}
 
-   @Action(/\(hint\).+/)
+   @Action(/^\(hint\).+/)
    async onHelpAction(@Ctx() ctx: ISceneContext, @CallbackData(REGEX.HINT_BUTTON) { data }: ICallbackData) {
       try {
          const message = ctx.session.menu.hints[data.menuID][data.hintID];
@@ -20,7 +21,7 @@ export class MenuUpdate {
          await ctx.answerCbQuery(MESSAGES.ERROR.UNKNOWN);
       }
    }
-   @Action(/\(btn\).+/)
+   @Action(/^\(btn\).+/)
    async onButtonAction(
       @Ctx() ctx: ISceneContext,
       @CallbackData(REGEX.BUTTON_ACTION) { action, data }: ICallbackData,
@@ -52,6 +53,20 @@ export class MenuUpdate {
                return;
             }
             await ctx.editMessageReplyMarkup(newKeyboard);
+            break;
+         }
+         case 'nums': {
+            const match: RegExpExecArray = action.matchAll(REGEX.NUMBERS_OPTION).next().value;
+            const option = match.groups.option;
+            await ctx.answerCbQuery();
+            await ctx.scene.enter(SCENES.MENU_NUMBERS, {
+               option,
+               action,
+               resulting: data.resulting,
+               menuID: data.menuID,
+               sceneID: ctx.session.__scenes.current,
+               wizardStep: ctx.session.__scenes.cursor
+            });
             break;
          }
       }

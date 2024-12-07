@@ -18,7 +18,9 @@ export class MenuService {
       const inlineButtons = options.buttons.map(buttonFn => {
          const builded = buttonFn(ctx);
          const initialValue = ctx.session.menu.results[menuID][builded.resultingProperty];
-         const inlineButton = [Markup.button.callback(`${builded.title}: ${initialValue}`, builded.action)];
+         const inlineButton = [
+            Markup.button.callback(`${builded.title}${initialValue != null ? `: ${initialValue}` : ''}`, builded.action)
+         ];
          if (builded.hintAction) {
             inlineButton.push(Markup.button.callback('?', builded.hintAction));
          }

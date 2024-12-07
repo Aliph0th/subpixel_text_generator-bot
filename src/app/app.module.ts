@@ -9,6 +9,7 @@ import { AdminScene } from '../scenes/admin';
 import { TextModeWizard } from '../scenes/text';
 import { AppUpdate } from './app.update';
 import { MenuModule } from '../menu/menu.module';
+import { NumberEnterScene } from '../scenes/enter';
 
 @Module({
    imports: [
@@ -43,6 +44,6 @@ import { MenuModule } from '../menu/menu.module';
       }),
       MenuModule
    ],
-   providers: [AppUpdate, TextModeWizard, AdminScene]
+   providers: [AppUpdate, TextModeWizard, AdminScene, NumberEnterScene]
 })
 export class AppModule {}

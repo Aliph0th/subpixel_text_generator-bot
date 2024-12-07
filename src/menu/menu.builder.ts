@@ -5,6 +5,7 @@ import {
    IBaseButton,
    IBoolButton,
    IMenuState,
+   INumbersButton,
    ISceneContext,
    ISwitchButton
 } from '../common/interfaces';
@@ -23,15 +24,17 @@ export class MenuBuilder {
    };
    private buildButton = (
       ctx: ISceneContext,
-      menuID: string,
       action: string,
-      initialValue: any,
-      options: ButtonOptions<IBaseButton>
+      options: ButtonOptions<IBaseButton>,
+      menuID?: string,
+      initialValue: any = null
    ) => {
       if (action.length > 64) {
          throw new Error(MESSAGES.ERROR.ACTION_TOO_LONG);
       }
-      ctx.session.menu.results[menuID][options.resultingProperty] = initialValue;
+      if (initialValue !== null && menuID) {
+         ctx.session.menu.results[menuID][options.resultingProperty] = initialValue;
+      }
       const button: BuildedButton = {
          title: options.title,
          resultingProperty: options.resultingProperty,
@@ -48,10 +51,10 @@ export class MenuBuilder {
          const menuID = ctx.session.menu.menuID;
          return this.buildButton(
             ctx,
-            menuID,
             `(btn)-t:bool-m:${menuID}-p:${options.resultingProperty}`,
-            options.default || false,
-            options
+            options,
+            menuID,
+            options.default || false
          );
       }
    };
@@ -61,11 +64,22 @@ export class MenuBuilder {
          const menuID = ctx.session.menu.menuID;
          return this.buildButton(
             ctx,
-            menuID,
             `(btn)-t:switch-m:${menuID}-p:${options.resultingProperty}-v:{${options.values.join()}}`,
-            options.values[0],
-            options
+            options,
+            menuID,
+            options.values[0]
          );
+      }
+   };
+
+   numbers = (options: ButtonOptions<INumbersButton>) => (ctx: ISceneContext) => {
+      {
+         const menuID = ctx.session.menu.menuID;
+         let action = `(btn)-t:nums-m:${menuID}-p:${options.resultingProperty}-o:${options.option}`;
+         if (options.min || options.max) {
+            action += `-c:${options.min || '_'}@${options.max || '_'}`;
+         }
+         return this.buildButton(ctx, action, options);
       }
    };
 }

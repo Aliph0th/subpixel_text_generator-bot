@@ -30,18 +30,17 @@ export type ButtonOptions<T extends IBaseButton> = { resultingProperty: string }
 export interface ISubmenuButton extends IBaseButton {
    submenu: IMenuOptions;
 }
+export interface IBackButton extends IBaseButton {}
+
 export interface ISwitchButton extends IBaseButton {
    values: Array<number | string | boolean>;
 }
-export interface IActionButton extends IBaseButton {
-   callback: (..._: any[]) => void;
-}
-export interface IBackButton extends IBaseButton {}
-export interface IEnterNumberButton extends IBaseButton {} //FIXME:
 export interface IBoolButton extends IBaseButton {
    default?: boolean;
 }
-export interface IBoundsButton extends IBaseButton {
-   min: number;
-   max: number;
+
+export interface INumbersButton extends IBaseButton {
+   option: 'single' | 'double' | 'both';
+   min?: number;
+   max?: number;
 }
