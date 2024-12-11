@@ -23,13 +23,19 @@ export class AppUpdate {
 
    @Command('test')
    async onTest(@Ctx() ctx: ISceneContext) {
+      const submenu = this.menuService.configureSubmenu(ctx, {
+         message: 'sub<b>menu</b>',
+         parseMode: 'HTML',
+         buttons: [this.MENU.bool({ title: 'bool', resultingProperty: 'bln' })]
+      });
       const menu = this.menuService.build(ctx, {
          message: 'test <b>message</b>',
          parseMode: 'HTML',
          buttons: [
             this.MENU.bool({ title: 'first button', resultingProperty: 'resulting_prop', hint: 'this is hint' }),
             this.MENU.numbers({ title: 'second button', option: 'double', max: 23, resultingProperty: '2nd' }),
-            this.MENU.switch({ title: 'switch', resultingProperty: 'swtch', values: ['font1', 3] })
+            this.MENU.switch({ title: 'switch', resultingProperty: 'swtch', values: ['font1', 3] }),
+            this.MENU.submenu({ title: 'submenu', resultingProperty: '', submenuID: submenu.id })
          ]
       });
       await ctx.reply(menu.message, {

@@ -5,6 +5,7 @@ export interface IMenuState {
    menuID: string;
    results: Record<string, Record<string, any>>;
    hints: Record<string, Record<string, string> & { currentID: string }>;
+   menus: Record<string, { config: string; parent?: string } & Omit<IMenuOptions, 'buttons'>>;
 }
 
 export interface IMenuOptions {
@@ -24,11 +25,16 @@ export interface IBaseButton {
    hint?: string;
 }
 
-export type BuildedButton = { title: string; action: string; hintAction?: string; resultingProperty: string };
+export type BuildedButton = {
+   title: string;
+   action: string;
+   hintAction?: string;
+   resultingProperty: string;
+};
 export type ButtonOptions<T extends IBaseButton> = { resultingProperty: string } & T;
 
 export interface ISubmenuButton extends IBaseButton {
-   submenu: IMenuOptions;
+   submenuID: string;
 }
 export interface IBackButton extends IBaseButton {}
 

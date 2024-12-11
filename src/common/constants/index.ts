@@ -26,7 +26,8 @@ export const MESSAGES = {
 export const DEFAULT_MENU_STATE: IMenuState = {
    menuID: '',
    hints: {},
-   results: {}
+   results: {},
+   menus: {}
 };
 
 export const ACTIONS = {
@@ -39,11 +40,13 @@ export const ACTIONS = {
 };
 
 export const REGEX = {
-   BUTTON_ACTION: /\(btn\)-t:(?<type>\w+)-m:(?<menuID>\w+)-p:(?<resulting>\w+)/g,
+   BUTTON_ACTION: /\(btn\)-t:(?<type>\w+)-m:(?<menuID>\w+)(-p:(?<resulting>\w+))?/g,
    HINT_BUTTON: /\(hint\)-m:(?<menuID>\w+)-h:(?<hintID>\w+)/g,
    SWITCH_VALUES: /-v:{(?<values>[\w,]+)}/g,
    NUMBERS_OPTION: /-o:(?<option>single|double|both)/g,
-   NUMBERS_CONSTRAINTS: /-c:(?<min>[\w,]+)@(?<max>[\w,]+)/g
+   NUMBERS_CONSTRAINTS: /-c:(?<min>[\w,]+)@(?<max>[\w,]+)/g,
+   RESULTING: /-p:(?<resulting>\w+)/g,
+   SUBMENU_BUTTON: /-mp:(?<parentID>\w+)/g
 };
 
 export const SCENES = {

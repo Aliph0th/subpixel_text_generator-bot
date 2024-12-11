@@ -69,6 +69,12 @@ export class MenuUpdate {
             });
             break;
          }
+         case 'sub': {
+            const menu = this.menuService.rebuild(data.menuID, ctx);
+            //await ctx.answerCbQuery();
+            await ctx.editMessageText(menu.message, { parse_mode: menu.parseMode, reply_markup: menu.markup });
+            break;
+         }
       }
    }
 

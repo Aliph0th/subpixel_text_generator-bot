@@ -7,6 +7,7 @@ import {
    IMenuState,
    INumbersButton,
    ISceneContext,
+   ISubmenuButton,
    ISwitchButton
 } from '../common/interfaces';
 import { getNextID } from '../utils';
@@ -14,9 +15,7 @@ import { MESSAGES } from '../common/constants';
 
 @Injectable()
 export class MenuBuilder {
-   constructor(/*@InjectBot() private readonly bot: Telegraf<ISceneContext>*/) {}
-   private buildHint = (menu: IMenuState, hint: string) => {
-      const menuID = menu.menuID;
+   private buildHint = (menuID: string, menu: IMenuState, hint: string) => {
       const hintID = (menu.hints[menuID] ??= { currentID: getNextID() }).currentID;
       menu.hints[menuID].currentID = getNextID(hintID);
       menu.hints[menuID][hintID] = hint;
@@ -26,13 +25,13 @@ export class MenuBuilder {
       ctx: ISceneContext,
       action: string,
       options: ButtonOptions<IBaseButton>,
-      menuID?: string,
+      menuID: string,
       initialValue: any = null
    ) => {
       if (action.length > 64) {
          throw new Error(MESSAGES.ERROR.ACTION_TOO_LONG);
       }
-      if (initialValue !== null && menuID) {
+      if (initialValue !== null) {
          ctx.session.menu.results[menuID][options.resultingProperty] = initialValue;
       }
       const button: BuildedButton = {
@@ -41,7 +40,7 @@ export class MenuBuilder {
          action
       };
       if (options.hint) {
-         button.hintAction = this.buildHint(ctx.session.menu, options.hint);
+         button.hintAction = this.buildHint(menuID, ctx.session.menu, options.hint);
       }
       return button;
    };
@@ -79,7 +78,13 @@ export class MenuBuilder {
          if (options.min || options.max) {
             action += `-c:${options.min || '_'}@${options.max || '_'}`;
          }
-         return this.buildButton(ctx, action, options);
+         return this.buildButton(ctx, action, options, menuID);
+      }
+   };
+
+   submenu = (options: ButtonOptions<ISubmenuButton>) => (ctx: ISceneContext) => {
+      {
+         return this.buildButton(ctx, `(btn)-t:sub-m:${options.submenuID}`, options, options.submenuID);
       }
    };
 }
