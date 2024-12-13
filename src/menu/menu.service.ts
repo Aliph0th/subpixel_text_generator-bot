@@ -18,7 +18,7 @@ export class MenuService {
 
       let menuConfig = '';
       const inlineButtons = options.buttons.map(buttonFn => {
-         const builded = buttonFn(ctx);
+         const builded = buttonFn(ctx, menuID);
          const initialValue = ctx.session.menu.results[menuID][builded.resultingProperty];
          const inlineButton = [
             Markup.button.callback(`${builded.title}${initialValue != null ? `: ${initialValue}` : ''}`, builded.action)
@@ -41,26 +41,14 @@ export class MenuService {
       };
    }
 
-   configureSubmenu(ctx: ISceneContext, options: IMenuOptions) {
-      ctx.session.menu ??= DEFAULT_MENU_STATE;
-      const parentMenuID = ctx.session.menu.menuID;
-      const subMenuID = getNextID(parentMenuID);
-      ctx.session.menu.menuID = subMenuID;
-      ctx.session.menu.results[subMenuID] = {};
-
-      const menuConfig = options.buttons.reduce<string>((config, buttonFn) => {
-         const builded = buttonFn(ctx);
-         config += `[<${builded.action}><${builded.title}>${builded.hintAction ? `<${builded.hintAction}>` : ''}]`;
-         return config;
-      }, '');
-
-      ctx.session.menu.menus[subMenuID] = {
-         config: menuConfig,
-         message: options.message,
-         parseMode: options.parseMode,
-         parent: parentMenuID
+   getConfigResolver(options: Pick<IMenuOptions, 'buttons'>) {
+      return (ctx: ISceneContext, parentMenuID: string) => {
+         return options.buttons.reduce<string>((config, buttonFn) => {
+            const builded = buttonFn(ctx, parentMenuID);
+            config += `[<${builded.action}><${builded.title}>${builded.hintAction ? `<${builded.hintAction}>` : ''}]`;
+            return config;
+         }, '');
       };
-      return { id: subMenuID };
    }
 
    patch({ inline_keyboard }: InlineKeyboardMarkup, resulting: string, value: string): InlineKeyboardMarkup | null {

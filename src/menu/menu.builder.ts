@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
    BuildedButton,
-   ButtonOptions,
+   IBackButton,
    IBaseButton,
    IBoolButton,
    IMenuState,
@@ -24,14 +24,14 @@ export class MenuBuilder {
    private buildButton = (
       ctx: ISceneContext,
       action: string,
-      options: ButtonOptions<IBaseButton>,
+      options: IBaseButton,
       menuID: string,
       initialValue: any = null
    ) => {
       if (action.length > 64) {
          throw new Error(MESSAGES.ERROR.ACTION_TOO_LONG);
       }
-      if (initialValue !== null) {
+      if (initialValue !== null && options.resultingProperty) {
          ctx.session.menu.results[menuID][options.resultingProperty] = initialValue;
       }
       const button: BuildedButton = {
@@ -45,46 +45,51 @@ export class MenuBuilder {
       return button;
    };
 
-   bool = (options: ButtonOptions<IBoolButton>) => (ctx: ISceneContext) => {
-      {
-         const menuID = ctx.session.menu.menuID;
-         return this.buildButton(
-            ctx,
-            `(btn)-t:bool-m:${menuID}-p:${options.resultingProperty}`,
-            options,
-            menuID,
-            options.default || false
-         );
-      }
+   bool = (options: IBoolButton) => (ctx: ISceneContext) => {
+      const menuID = ctx.session.menu.menuID;
+      return this.buildButton(
+         ctx,
+         `(btn)-t:bool-m:${menuID}-p:${options.resultingProperty}`,
+         options,
+         menuID,
+         options.default || false
+      );
    };
 
-   switch = (options: ButtonOptions<ISwitchButton>) => (ctx: ISceneContext) => {
-      {
-         const menuID = ctx.session.menu.menuID;
-         return this.buildButton(
-            ctx,
-            `(btn)-t:switch-m:${menuID}-p:${options.resultingProperty}-v:{${options.values.join()}}`,
-            options,
-            menuID,
-            options.values[0]
-         );
-      }
+   switch = (options: ISwitchButton) => (ctx: ISceneContext) => {
+      const menuID = ctx.session.menu.menuID;
+      return this.buildButton(
+         ctx,
+         `(btn)-t:switch-m:${menuID}-p:${options.resultingProperty}-v:{${options.values.join()}}`,
+         options,
+         menuID,
+         options.values[0]
+      );
    };
 
-   numbers = (options: ButtonOptions<INumbersButton>) => (ctx: ISceneContext) => {
-      {
-         const menuID = ctx.session.menu.menuID;
-         let action = `(btn)-t:nums-m:${menuID}-p:${options.resultingProperty}-o:${options.option}`;
-         if (options.min || options.max) {
-            action += `-c:${options.min || '_'}@${options.max || '_'}`;
-         }
-         return this.buildButton(ctx, action, options, menuID);
+   numbers = (options: INumbersButton) => (ctx: ISceneContext) => {
+      const menuID = ctx.session.menu.menuID;
+      let action = `(btn)-t:nums-m:${menuID}-p:${options.resultingProperty}-o:${options.option}`;
+      if (options.min || options.max) {
+         action += `-c:${options.min || '_'}@${options.max || '_'}`;
       }
+      return this.buildButton(ctx, action, options, menuID);
    };
 
-   submenu = (options: ButtonOptions<ISubmenuButton>) => (ctx: ISceneContext) => {
-      {
-         return this.buildButton(ctx, `(btn)-t:sub-m:${options.submenuID}`, options, options.submenuID);
-      }
+   submenu = (options: ISubmenuButton) => (ctx: ISceneContext, parentMenuID: string) => {
+      const subMenuID = getNextID(parentMenuID);
+      ctx.session.menu.menuID = subMenuID;
+      ctx.session.menu.results[subMenuID] = {};
+      ctx.session.menu.menus[subMenuID] = {
+         config: options.configResolver(ctx, parentMenuID),
+         message: options.message,
+         parseMode: options.parseMode,
+         parent: parentMenuID
+      };
+      return this.buildButton(ctx, `(btn)-t:sub-m:${subMenuID}`, options, subMenuID);
+   };
+
+   back = (options: IBackButton) => (ctx: ISceneContext) => {
+      return this.buildButton(ctx, `(btn)-t:back-m:${options.menuID}`, options, options.menuID);
    };
 }
